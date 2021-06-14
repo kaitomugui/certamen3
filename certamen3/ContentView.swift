@@ -36,7 +36,7 @@ struct ContentView: View {
                     })
                 }
             }
-            .navigationBarTitle("Notas")
+            .navigationBarTitle("Lista de Notas")
         }.onAppear(perform: loadTodos)
     }
     
