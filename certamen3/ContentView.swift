@@ -13,32 +13,35 @@ struct ContentView: View {
     private let todosKey = "todosKey"
 
     var body: some View {
-        NavigationView{
-            VStack{
-                HStack{
-                    TextField("Agregar Nota", text:$newNota)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                    Button(action:{
-                        guard !self.newNota.isEmpty else {return}
-                        self.allNota.append(NotaItem (nota:self.newNota))
-                        self.newNota = ""
-                        self.saveTodos()
-                    })
-                    {
-                        Image(systemName: "plus").padding()
+            NavigationView{
+                ZStack{
+                    Color.black
+                    VStack{
+                        HStack{
+                            TextField("Agregar Nota", text:$newNota)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                            Button(action:{
+                                guard !self.newNota.isEmpty else {return}
+                                self.allNota.append(NotaItem (nota:self.newNota))
+                                self.newNota = ""
+                                self.saveTodos()
+                            })
+                            {
+                                Image(systemName: "plus").padding()
+                            }
+                        }.padding(.leading, 5)
+                        List{
+                            ForEach(allNota){ notaItem in
+                                Text(notaItem.nota)
+                            }.onDelete(perform: { IndexSet in
+                                deleteTodos(al: IndexSet)
+                            })
+                        }
                     }
-                }.padding(.leading, 5)
-                List{
-                    ForEach(allNota){ notaItem in
-                        Text(notaItem.nota)
-                    }.onDelete(perform: { IndexSet in
-                        deleteTodos(al: IndexSet)
-                    })
-                }
+                    .navigationBarTitle("Lista de Notas")
+                }.onAppear(perform: loadTodos)
             }
-            .navigationBarTitle("Lista de Notas")
-        }.onAppear(perform: loadTodos)
-    }
+        }
     
     private func deleteTodos(al offsets: IndexSet){
         self.allNota.remove(atOffsets: offsets )
