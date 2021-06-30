@@ -7,16 +7,28 @@
 import SwiftUI
 
 struct ContentView: View {
-    
+
     @State private var newNota = ""
     @State private var allNota: [NotaItem] = []
     private let todosKey = "todosKey"
 
+    
+    init() { //Perminte cambiar el diseño del BatTitle
+
+        UINavigationBar.appearance().backgroundColor = .systemRed
+
+         UINavigationBar.appearance().largeTitleTextAttributes = [
+            .foregroundColor: UIColor.white,
+                   .font : UIFont(name:"Helvetica Neue", size: 40)!]
+
+    }
+    
     var body: some View {
-            NavigationView{
+        NavigationView{
+            
+            VStack{
                 ZStack{
-                    Color.black
-                    VStack{
+                    VStack(spacing: 1.0){
                         HStack{
                             TextField("Agregar Nota", text:$newNota)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -27,7 +39,7 @@ struct ContentView: View {
                                 self.saveTodos()
                             })
                             {
-                                Image(systemName: "plus").padding()
+                                Image(systemName: "plus.rectangle.fill").padding()
                             }
                         }.padding(.leading, 5)
                         List{
@@ -37,11 +49,12 @@ struct ContentView: View {
                                 deleteTodos(al: IndexSet)
                             })
                         }
-                    }
-                    .navigationBarTitle("Lista de Notas")
+                    }.foregroundColor(Color.red).background(Color.black)
+                    .navigationBarTitle(Text("Lista de Notas"))
                 }.onAppear(perform: loadTodos)
             }
         }
+    }
     
     private func deleteTodos(al offsets: IndexSet){
         self.allNota.remove(atOffsets: offsets )
